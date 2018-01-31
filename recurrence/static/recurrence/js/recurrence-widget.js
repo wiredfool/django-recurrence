@@ -238,6 +238,7 @@ recurrence.widget.Calendar.prototype = {
             month != this.date.getMonth() ||
             day != this.date.getDate()) {
 
+            this.date.setDate(1); /* safe, always */
             this.date.setFullYear(year);
             this.date.setMonth(month);
             this.date.setDate(day);
@@ -405,6 +406,8 @@ recurrence.widget.DateSelector.prototype = {
 
                 if (!this.date)
                     this.date = recurrence.widget.date_today();
+                
+                this.date.setDate(1); /* safe, always */
                 this.date.setFullYear(year);
                 this.date.setMonth(month);
                 this.date.setDate(day);
