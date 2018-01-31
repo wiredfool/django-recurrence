@@ -1,5 +1,6 @@
 if (!recurrence)
-    var recurrence = {};
+    var recurrence = { 'USE_DATE': 1,
+                       'NO_UTC': 0};
 
 
 recurrence.Rule = function(freq, options) {
@@ -571,6 +572,15 @@ recurrence.serialize = function(rule_or_recurrence) {
                 return initial;
             }
         };
+        if (recurrence.USE_DATE) {
+            return pad(dt.getFullYear(), 4) +
+                pad(dt.getMonth() + 1, 2) +
+                pad(dt.getDate(), 2);
+        } else if (recurrence.NO_UTC) {
+            return pad(dt.getFullYear(), 4) +
+                pad(dt.getMonth() + 1, 2) +
+                pad(dt.getDate(), 2) + '000000';
+        } 
         return pad(dt.getUTCFullYear(), 4) +
             pad(dt.getUTCMonth() + 1, 2) +
             pad(dt.getUTCDate(), 2) + 'T' +
@@ -678,8 +688,27 @@ recurrence.deserialize = function(text) {
             var second = 0;
         }
         var dt = new Date();
-        if (text.indexOf('Z') > 0) {
-            dt.setTime(Date.UTC(year, month - 1, day, hour, minute, second) / 1);
+        if (recurrence.USE_DATE) {
+            dt.setFullYear(year);
+            dt.setMonth(month - 1);
+            dt.setDate(day);
+            dt.setHours(0);
+            dt.setMinutes(0);
+            dt.setSeconds(0);
+        } else if (recurrence.NO_UTC) {
+            dt.setFullYear(year);
+            dt.setMonth(month - 1);
+            dt.setDate(day);
+            dt.setHours(hour);
+            dt.setMinutes(minute);
+            dt.setSeconds(second);
+        } else if (text.indexOf('Z') > 0) {
+            dt.setUTCFullYear(year);
+            dt.setUTCMonth(month - 1);
+            dt.setUTCDate(day);
+            dt.setUTCHours(hour);
+            dt.setUTCMinutes(minute);
+            dt.setUTCSeconds(second);
         } else {
             dt.setTime(new Date(year, month - 1, day, hour, minute, second).getTime());
         }
