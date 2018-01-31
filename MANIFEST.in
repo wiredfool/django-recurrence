@@ -6,3 +6,4 @@ recursive-include docs *
 recursive-include recurrence/static *
 recursive-include recurrence/locale *
 recursive-include tests *
+exclude tests/__pycache__/*
