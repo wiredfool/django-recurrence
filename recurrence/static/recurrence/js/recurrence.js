@@ -676,7 +676,7 @@ recurrence.serialize = function(rule_or_recurrence) {
 recurrence.deserialize = function(text) {
     var deserialize_dt = function(text) {
         var year = parseInt(text.slice(0, 4), 10);
-        var month = parseInt(text.slice(4, 6), 10);
+        var month = parseInt(text.slice(4, 6), 10) - 1; // 0 based
         var day = parseInt(text.slice(6, 8), 10);
         if (text.indexOf('T') > 0) {
             var hour = parseInt(text.slice(9, 11), 10);
@@ -689,28 +689,13 @@ recurrence.deserialize = function(text) {
         }
         var dt = new Date();
         if (recurrence.USE_DATE) {
-            dt.setFullYear(year);
-            dt.setMonth(month - 1);
-            dt.setDate(day);
-            dt.setHours(0);
-            dt.setMinutes(0);
-            dt.setSeconds(0);
+            return new Date(year, month, day);
         } else if (recurrence.NO_UTC) {
-            dt.setFullYear(year);
-            dt.setMonth(month - 1);
-            dt.setDate(day);
-            dt.setHours(hour);
-            dt.setMinutes(minute);
-            dt.setSeconds(second);
+            return new Date(year, month, day, hour, minute, second);
         } else if (text.indexOf('Z') > 0) {
-            dt.setUTCFullYear(year);
-            dt.setUTCMonth(month - 1);
-            dt.setUTCDate(day);
-            dt.setUTCHours(hour);
-            dt.setUTCMinutes(minute);
-            dt.setUTCSeconds(second);
+            return new Date(Date.UTC(year, month, day, hour, minute, second));
         } else {
-            dt.setTime(new Date(year, month - 1, day, hour, minute, second).getTime());
+            return new Date(year, month, day, hour, minute, second);
         }
         return dt;
     };
