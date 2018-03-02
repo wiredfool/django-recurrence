@@ -18,7 +18,7 @@ except ImportError:
 class RecurrenceField(fields.Field):
     """Field that stores a `recurrence.base.Recurrence` to the database."""
 
-    def __init__(self, include_dtstart=True, **kwargs):
+    def __init__(self, include_dtstart=False, **kwargs):
         self.include_dtstart = include_dtstart
         super(RecurrenceField, self).__init__(**kwargs)
 
