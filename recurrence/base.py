@@ -299,7 +299,7 @@ class Recurrence(object):
     """
     def __init__(
         self, dtstart=None, dtend=None, rrules=(), exrules=(),
-            rdates=(), exdates=(), include_dtstart=True
+            rdates=(), exdates=(), include_dtstart=False
     ):
         """
         Create a new recurrence.
@@ -909,7 +909,7 @@ def serialize(rule_or_recurrence):
     return u'\n'.join(u'%s:%s' % i for i in items)
 
 
-def deserialize(text, include_dtstart=True):
+def deserialize(text, include_dtstart=False):
     """
     Deserialize a rfc2445 formatted string.
 
