@@ -216,10 +216,12 @@ def find_recurrence_i18n_js_catalog():
 
     # first try to use the dynamic form of the javascript_catalog view
     try:
-        return urls.reverse(
-            _javascript_catalog, kwargs={'packages': 'recurrence'})
+        return urls.reverse('javascript-catalog')
     except urls.NoReverseMatch:
-        pass
+        try:
+            return urls.reverse(_javascript_catalog, kwargs={'packages': 'recurrence'})
+        except urls.NoReverseMatch:
+            pass
 
     # then scan the entire urlconf for a javascript_catalague pattern
     # that manually selects recurrence as one of the packages to include
