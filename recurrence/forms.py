@@ -45,10 +45,11 @@ class RecurrenceWidget(forms.Textarea):
             super(RecurrenceWidget, self).render(name, value, attrs),
             widget_init_js))
 
-    def get_media(self):
+    @property
+    def media(self):
         js = [
-            staticfiles_storage.url('recurrence/js/recurrence.js'),
-            staticfiles_storage.url('recurrence/js/recurrence-widget.js'),
+            'recurrence/js/recurrence.js',
+            'recurrence/js/recurrence-widget.js',
         ]
         i18n_media = find_recurrence_i18n_js_catalog()
         if i18n_media:
@@ -57,11 +58,10 @@ class RecurrenceWidget(forms.Textarea):
         return forms.Media(
             js=js, css={
                 'all': (
-                    staticfiles_storage.url('recurrence/css/recurrence.css'),
+                    'recurrence/css/recurrence.css',
                 ),
             },
         )
-    media = property(get_media)
 
 
 class RecurrenceField(forms.CharField):
@@ -207,10 +207,17 @@ def find_recurrence_i18n_js_catalog():
     if _recurrence_javascript_catalog_url:
         return _recurrence_javascript_catalog_url
 
+
+    if hasattr(i18n, 'javascript_catalog'):
+        _javascript_catalog = i18n.javascript_catalog
+    else:
+        # Django 2.0
+        _javascript_catalog = i18n.JavaScriptCatalog
+
     # first try to use the dynamic form of the javascript_catalog view
     try:
         return urls.reverse(
-            i18n.javascript_catalog, kwargs={'packages': 'recurrence'})
+            _javascript_catalog, kwargs={'packages': 'recurrence'})
     except urls.NoReverseMatch:
         pass
 
@@ -222,7 +229,7 @@ def find_recurrence_i18n_js_catalog():
                 match = check_urlpatterns(pattern.url_patterns)
                 if match:
                     return match
-            elif (pattern.callback == i18n.javascript_catalog and
+            elif (pattern.callback ==  _javascript_catalog and
                   'recurrence' in pattern.default_args.get('packages', [])):
                 if pattern.name:
                     return urls.reverse(pattern.name)
