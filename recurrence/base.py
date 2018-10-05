@@ -1021,7 +1021,8 @@ def deserialize(text, include_dtstart=False):
                         raise exceptions.DeserializationError(
                             'bad count value: %r' % value[0])
                 elif key == u'UNTIL':
-                    kwargs[str(key.lower())] = deserialize_dt(value[0])
+                    # make the end date inclusive.
+                    kwargs[str(key.lower())] = deserialize_dt(value[0]) + timezone.timedelta(days=1)
                 elif key == u'BYDAY':
                     bydays = []
                     for v in value:
