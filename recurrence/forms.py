@@ -28,7 +28,7 @@ class RecurrenceWidget(forms.Textarea):
             defaults.update(attrs)
         super(RecurrenceWidget, self).__init__(defaults)
 
-    def render(self, name, value, attrs=None):
+    def render(self, name, value, attrs=None, renderer=None):
         if value is None:
             value = ''
         elif isinstance(value, recurrence.Recurrence):
@@ -42,7 +42,7 @@ class RecurrenceWidget(forms.Textarea):
         ) % (get_language(), attrs['id'], json.dumps(self.js_widget_options))
 
         return safestring.mark_safe(u'%s\n%s' % (
-            super(RecurrenceWidget, self).render(name, value, attrs),
+            super(RecurrenceWidget, self).render(name, value, attrs, renderer),
             widget_init_js))
 
     @property
