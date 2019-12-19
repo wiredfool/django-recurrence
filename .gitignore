@@ -8,3 +8,8 @@ htmlcov/
 docs/_build
 build/
 dist/
+.Python
+.eggs/
+bin/
+include/
+lib/
