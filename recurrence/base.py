@@ -16,9 +16,9 @@ import calendar
 import pytz
 import dateutil.rrule
 from django.utils import dateformat, timezone
-from django.utils.encoding import python_2_unicode_compatible
+from six import python_2_unicode_compatible
 from django.utils.translation import ugettext as _, pgettext as _p
-from django.utils.six import string_types
+from six import string_types
 
 from recurrence import exceptions
 
