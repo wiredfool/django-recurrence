@@ -1,5 +1,5 @@
 from django.db.models import fields
-from django.utils.six import string_types
+from six import string_types
 import recurrence
 from recurrence import forms
 from recurrence.compat import Creator
